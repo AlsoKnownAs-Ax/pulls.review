@@ -43,6 +43,7 @@ export function injectGithubPageStyles(): void {
 .${PANEL_OPEN_CLASS} [id="diff-comparison-viewer-container"] { margin-left: 0 !important; }
 .${PANEL_OPEN_CLASS} [data-component="PageHeader"] [data-component="TitleArea"] { margin-left: 0 !important; }
 .${PANEL_OPEN_CLASS} :has(> [id="pr-conversation-sidebar"]) { display: none !important; }
+.${PANEL_OPEN_CLASS} [data-component="SplitPageLayout.Pane"]:has(> [data-testid="sticky-sidebar"]) { display: none !important; }
 `
   window.document.head.appendChild(style)
 }
