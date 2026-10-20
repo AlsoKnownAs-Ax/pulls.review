@@ -248,6 +248,8 @@
     "expandAll": "Buka semua berkas",
     "collapseAll": "Tutup semua berkas",
     "collapseReviewed": "Tutup berkas yang sudah ditinjau",
+    "collapseTests": "Tutup berkas pengujian",
+    "test": "Berkas pengujian",
     "noLongerInDiff": "Tidak lagi ada di diff ini",
     "removed": "dihapus"
   },
@@ -330,7 +332,9 @@
     "updatingGrouping": "Memperbarui pengelompokan…",
     "submittingGrouping": "Mengirim pengelompokan…",
     "requestFailed": "Permintaan gagal",
-    "stopped": "dihentikan"
+    "stopped": "dihentikan",
+    "askAboutSelection": "Tanya AI",
+    "removeQuote": "Hapus"
   },
   "settings": {
     "layout": "Tata letak diff",

@@ -248,6 +248,8 @@
     "expandAll": "Alle Dateien ausklappen",
     "collapseAll": "Alle Dateien einklappen",
     "collapseReviewed": "Reviewte Dateien einklappen",
+    "collapseTests": "Testdateien einklappen",
+    "test": "Testdatei",
     "noLongerInDiff": "Nicht mehr in diesem Diff",
     "removed": "entfernt"
   },
@@ -330,7 +332,9 @@
     "updatingGrouping": "Gruppierung wird aktualisiert…",
     "submittingGrouping": "Gruppierung wird gesendet…",
     "requestFailed": "Anfrage fehlgeschlagen",
-    "stopped": "gestoppt"
+    "stopped": "gestoppt",
+    "askAboutSelection": "KI fragen",
+    "removeQuote": "Entfernen"
   },
   "settings": {
     "layout": "Diff-Layout",

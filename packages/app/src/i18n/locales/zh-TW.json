@@ -248,6 +248,8 @@
     "expandAll": "展開所有檔案",
     "collapseAll": "折疊所有檔案",
     "collapseReviewed": "折疊已審閱的檔案",
+    "collapseTests": "折疊測試檔案",
+    "test": "測試檔案",
     "noLongerInDiff": "已不在此 diff 中",
     "removed": "已移除"
   },
@@ -330,7 +332,9 @@
     "updatingGrouping": "正在更新分組…",
     "submittingGrouping": "正在送出分組…",
     "requestFailed": "請求失敗",
-    "stopped": "已停止"
+    "stopped": "已停止",
+    "askAboutSelection": "詢問 AI",
+    "removeQuote": "移除"
   },
   "settings": {
     "layout": "Diff 版面",

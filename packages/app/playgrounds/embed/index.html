@@ -83,6 +83,7 @@
       <label>repo <input id="repo" value="eslint-config" /></label>
       <label>PR # <input id="number" value="861" /></label>
       <button id="load" type="button">Navigate</button>
+      <button id="leave" type="button">Leave PR</button>
       <button id="toggle-dark" type="button">Toggle host dark mode</button>
       <span id="current-path"></span>
     </div>
@@ -106,7 +107,8 @@
       Stands in for the userscript's `@require`: point this at wherever `diffs-embed.js`
       is actually being served. `pnpm run build:embed` writes it to public/embed/,
       which `pnpm dev`'s main Vite server also serves verbatim at this same path - so
-      running `pnpm run playground:embedded` after a build just works.
+      running `pnpm --filter @pulls.review/app run play:embed` from the repository
+      root builds the bundle and opens this playground.
     -->
     <script src="/embed/diffs-embed.js"></script>
     <script>
@@ -131,6 +133,8 @@
         document.body.classList.toggle('dark-host', mode === 'dark')
       }
 
+      // Like GitHub's React Router pages: `pushState`, then re-render - no navigation
+      // event. The component picks the new path up from the DOM change that follows.
       function navigateTo(owner, repo, number) {
         const path = `/${owner}/${repo}/pull/${number}`
         history.pushState(null, '', path)
@@ -138,13 +142,16 @@
         const reviewLink = document.getElementById('review-link')
         reviewLink.href = `https://pulls.review/gh/${owner}/${repo}/${number}?from=github-actions[bot]`
         reviewLink.textContent = reviewLink.href
-        // Turbo's own navigation event, which the component listens for to re-sync -
-        // `pushState` alone doesn't fire anything observable.
-        document.dispatchEvent(new Event('turbo:load'))
       }
 
       document.getElementById('load').addEventListener('click', () => {
         navigateTo(ownerInput.value.trim(), repoInput.value.trim(), numberInput.value.trim())
+      })
+
+      document.getElementById('leave').addEventListener('click', () => {
+        const path = `/${ownerInput.value.trim()}/${repoInput.value.trim()}/pulls`
+        history.pushState(null, '', path)
+        currentPathEl.textContent = path
       })
 
       // Dark mode is seeded once, at mount, from the host attribute - matching real

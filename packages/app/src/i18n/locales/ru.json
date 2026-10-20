@@ -248,6 +248,8 @@
     "expandAll": "Развернуть все файлы",
     "collapseAll": "Свернуть все файлы",
     "collapseReviewed": "Свернуть проверенные файлы",
+    "collapseTests": "Свернуть файлы тестов",
+    "test": "Файл тестов",
     "noLongerInDiff": "Больше нет в этом diff",
     "removed": "удалён"
   },
@@ -330,7 +332,9 @@
     "updatingGrouping": "Обновление группировки…",
     "submittingGrouping": "Отправка группировки…",
     "requestFailed": "Запрос не удался",
-    "stopped": "остановлено"
+    "stopped": "остановлено",
+    "askAboutSelection": "Спросить ИИ",
+    "removeQuote": "Убрать"
   },
   "settings": {
     "layout": "Вид diff",

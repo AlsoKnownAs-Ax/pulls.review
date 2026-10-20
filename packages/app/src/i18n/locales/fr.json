@@ -248,6 +248,8 @@
     "expandAll": "Déplier tous les fichiers",
     "collapseAll": "Replier tous les fichiers",
     "collapseReviewed": "Replier les fichiers relus",
+    "collapseTests": "Replier les fichiers de test",
+    "test": "Fichier de test",
     "noLongerInDiff": "N'est plus dans ce diff",
     "removed": "supprimé"
   },
@@ -330,7 +332,9 @@
     "updatingGrouping": "Mise à jour du regroupement…",
     "submittingGrouping": "Envoi du regroupement…",
     "requestFailed": "La requête a échoué",
-    "stopped": "arrêté"
+    "stopped": "arrêté",
+    "askAboutSelection": "Demander à l'IA",
+    "removeQuote": "Retirer"
   },
   "settings": {
     "layout": "Disposition du diff",

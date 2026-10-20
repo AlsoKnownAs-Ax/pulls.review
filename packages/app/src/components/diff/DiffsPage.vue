@@ -1,18 +1,22 @@
 <script setup lang="ts">
 import type { CommitNav } from '../../composables/useCommitView'
 import type { DiffsStore } from '../../stores/types'
+import type { ChatDraft } from '../chat/chat-quotes'
 import ActionButton from '@antfu/design/components/Action/ActionButton.vue'
 import FeedbackEmptyState from '@antfu/design/components/Feedback/FeedbackEmptyState.vue'
 import FeedbackLoading from '@antfu/design/components/Feedback/FeedbackLoading.vue'
 import FormCheckbox from '@antfu/design/components/Form/FormCheckbox.vue'
 import { Markdown } from '@comark/vue'
+import mermaid from '@comark/vue/plugins/mermaid'
 import { Virtualizer } from '@pierre/diffs'
 import { useElementBounding, useElementSize, useEventListener } from '@vueuse/core'
 import { computed, defineAsyncComponent, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref, useId, useTemplateRef, watch } from 'vue'
 import { useDragResize } from '../../composables/useDragResize'
 import { autoRefresh } from '../../state/auto-refresh'
+import { CHAT_PANEL_DOCK_MIN_WIDTH } from '../../state/chat-panel'
 import { GROUP_SIDEBAR_MAX_RATIO, GROUP_SIDEBAR_MIN_WIDTH, groupSidebarWidth, isWide, showGroupSidebar } from '../../state/group-nav'
 import { scrollBehavior } from '../../state/smooth-scroll'
+import { chatDraftKey } from '../chat/chat-quotes'
 import GithubTokenRecovery from '../settings/GithubTokenRecovery.vue'
 import { diffVirtualizerKey } from './diff-virtualizer'
 import DiffGroup from './DiffGroup.vue'
@@ -33,6 +37,15 @@ const ChatWidget = import.meta.env.PR_LLM
   ? defineAsyncComponent(() => import('../chat/ChatWidget.vue'))
   : undefined
 
+// Compiled out of the embed: its single IIFE would inline the whole diagram renderer
+// (see `vite.config.embed.ts`), and github.com already renders the description itself.
+const descriptionMarkdown = import.meta.env.PR_EMBED
+  ? {}
+  : {
+      plugins: [mermaid()],
+      components: { mermaid: defineAsyncComponent(() => import('../MarkdownMermaid.vue')) },
+    }
+
 const diff = computed(() => props.store?.diff)
 const grouped = computed(() => props.store?.grouped)
 const isLoading = computed(() => props.store?.isLoading ?? false)
@@ -47,6 +60,8 @@ const groups = computed(() => props.store?.groups ?? [])
 const virtualizer = new Virtualizer()
 provide(diffVirtualizerKey, virtualizer)
 provide(fileCollapseKey, reactive(new Map<string, boolean>()))
+const chatDraft = reactive<ChatDraft>({ open: false, quotes: [] })
+provide(chatDraftKey, chatDraft)
 const rootEl = useTemplateRef<HTMLElement>('root')
 onMounted(() => {
   virtualizer.setup(props.document && !(props.document instanceof Document) ? rootEl.value! : document)
@@ -158,6 +173,9 @@ const sidebarStyle = computed(() => groupSidebarWidth.value
   : undefined)
 const sidebarRowEl = useTemplateRef<HTMLElement>('sidebarRow')
 const sidebarEl = useTemplateRef<HTMLElement>('sidebar')
+// Measured on the row rather than the viewport: inside the embed the page is a drawer.
+const { width: sidebarRowWidth } = useElementSize(sidebarRowEl)
+const chatDocked = computed(() => sidebarRowWidth.value >= CHAT_PANEL_DOCK_MIN_WIDTH)
 const { resizing: resizingSidebar, onPointerDown: onSidebarResizeDown } = useDragResize({
   target: () => sidebarEl.value,
   width: groupSidebarWidth,
@@ -279,7 +297,7 @@ function refreshFromBanner() {
               >
                 <div ref="descriptionBody">
                   <Suspense>
-                    <Markdown :value="diff.description" class="description-markdown min-w-0" />
+                    <Markdown :value="diff.description" v-bind="descriptionMarkdown" class="description-markdown min-w-0" />
                   </Suspense>
                 </div>
               </div>
@@ -317,6 +335,7 @@ function refreshFromBanner() {
             <DiffGroup
               v-for="group in groups"
               :key="group.key"
+              :document="document"
               :store="store!"
               :group="group"
               :collapsed="collapsedGroups.has(group.key)"
@@ -329,9 +348,16 @@ function refreshFromBanner() {
               {{ $t('pr.endOfDiff') }}
             </div>
           </div>
-        </div>
 
-        <ChatWidget v-if="ChatWidget && store?.llm && store.aiResult" :store="store" />
+          <!-- Last in the row so it docks at the right edge; when it floats instead it's out of the flow. -->
+          <ChatWidget
+            v-if="ChatWidget && store?.llm && store.aiResult"
+            v-model:open="chatDraft.open"
+            v-model:quotes="chatDraft.quotes"
+            :store="store"
+            :docked="chatDocked"
+          />
+        </div>
       </template>
       <template v-else>
         <div class="mxa max-w-500 w-full px-4 py-12">

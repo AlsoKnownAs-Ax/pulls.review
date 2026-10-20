@@ -248,6 +248,8 @@
     "expandAll": "Espandi tutti i file",
     "collapseAll": "Comprimi tutti i file",
     "collapseReviewed": "Comprimi i file revisionati",
+    "collapseTests": "Comprimi i file di test",
+    "test": "File di test",
     "noLongerInDiff": "Non è più in questo diff",
     "removed": "rimosso"
   },
@@ -330,7 +332,9 @@
     "updatingGrouping": "Aggiornamento del raggruppamento…",
     "submittingGrouping": "Invio del raggruppamento…",
     "requestFailed": "Richiesta fallita",
-    "stopped": "fermato"
+    "stopped": "fermato",
+    "askAboutSelection": "Chiedi all'IA",
+    "removeQuote": "Rimuovi"
   },
   "settings": {
     "layout": "Layout del diff",

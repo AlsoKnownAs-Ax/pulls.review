@@ -14,7 +14,7 @@ function descendant(selector: string, utilities: string) {
   return utilities.split(' ').map(utility => `[&_${selector}]:${utility}`).join(' ')
 }
 
-const MARKDOWN_BLOCK = ':is(p,ul,ol,pre,blockquote,table,hr,h1,h2,h3,h4)'
+const MARKDOWN_BLOCK = ':is(p,ul,ol,pre,blockquote,table,hr,h1,h2,h3,h4,.markdown-mermaid)'
 
 /** Rendered chat Markdown, whose elements the template can't put classes on. */
 const chatMarkdown = [
@@ -62,6 +62,14 @@ export function createUnoConfig() {
       },
       { 'chat-markdown': chatMarkdown },
       { 'description-markdown': chatMarkdown },
+      {
+        'markdown-mermaid': [
+          'flex justify-center overflow-x-auto',
+          descendant('svg', 'max-w-full h-auto'),
+          '[--mermaid-background:#ffffff] dark:[--mermaid-background:#121212]',
+          '[--mermaid-foreground:#262626] dark:[--mermaid-foreground:#e5e5e5]',
+        ].join(' '),
+      },
       // Overrides
       {
         'bg-active': 'bg-[#8881]',
